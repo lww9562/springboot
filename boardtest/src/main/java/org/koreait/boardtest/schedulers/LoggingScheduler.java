@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.koreait.boardtest.models.board.Board;
 import org.koreait.boardtest.models.board.BoardDao;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,13 @@ import java.util.List;
 public class LoggingScheduler {
 	private final BoardDao boardDao;
 	private int[] time_stat = new int[24];
+	private final JdbcTemplate jdbcTemplate;
 
 	@Scheduled(cron = "0 0 1 * * *")
 	public void getTimeStatistics(){
+		//SELECT TO_CHAR(REGDT, 'HH24') AS HOURS, COUNT(TO_CHAR(REGDT, 'HH24')) AS COUNTVALUE
+		//FROM BOARD
+		//GROUP BY TO_CHAR(REGDT, 'HH24');
 		Arrays.fill(time_stat, 0);
 
 		List<Board> boards = boardDao.getList();
@@ -31,5 +36,15 @@ public class LoggingScheduler {
 		}
 		System.out.println();
 		System.out.println(Arrays.toString(time_stat));
+
+
+	}
+	@Scheduled(cron = "0 0 1 * * *")
+	public void getTimeStatistics2(){
+		String sql = "SELECT TO_CHAR(REGDT, 'HH24') AS HOURS, COUNT(TO_CHAR(REGDT, 'HH24'))" +
+				"FROM BOARD" +
+				"GROUP BY TO_CHAR(REGDT, 'HH24')";
+
+		//jdbcTemplate.queryForObject(sql)
 	}
 }

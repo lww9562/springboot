@@ -16,7 +16,7 @@
 		width: 100%;
 		border-top: 1px solid #ccc;
 		border-bottom: 1px solid #ccc;
-
+	}
 	.board_table th {
 		text-align: center;
 	}
@@ -24,20 +24,26 @@
 		width : 50px;
 		text-align:center;
 	}
+
 	.th_subject{
 		width : 400px;
-		text-aligh:center;
+		text-align:center;
+	}
+
 	.th_regDt{
 		width : 200px;
 		text-align:right;
 	}
+
 	.td_num{
 		width : 50px;
 		text-align:center;
 	}
+
 	.td_subject{
 		width : 400px;
 		text-aligh:center;
+	}
 	.td_regDt{
 		width : 200px;
 		text-align:right;
@@ -66,7 +72,7 @@
 				<td class="td_subject">
 					<a th:href="@{/board/details/{id}(id=*{id})}" th:text="*{subject}"></a>
 				</td>
-				<td class="td_regDt" th:text="*{regDt}"></td>
+				<td class = "td_regDt" th:text="*{#temporals.format(regDt, 'yyyy-MM-dd HH:mm:ss')}"></td>
 			</tr>
 			</tbody>
 		</table>
