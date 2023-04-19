@@ -13,12 +13,12 @@ import java.util.List;
 public class User {
 	private Long userNo;
 	private String userId;
-	@JsonIgnore
+	//@JsonIgnore
 	private String userPw;
 	private String userNm;
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
-	private LocalDateTime regDt;
+	//@JsonFormat(pattern="yyyy-MM-dd HH:mm")
+	//private LocalDateTime regDt;
 
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
-	private LocalDateTime modDt;
+//	@JsonFormat(pattern="yyyy-MM-dd HH:mm")
+	//private LocalDateTime modDt;
 }
