@@ -1,7 +1,9 @@
 package org.koreait.controllers;
 
+import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import org.koreait.entities.Member;
+import org.koreait.entities.QMember;
 import org.koreait.repositories.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,5 +74,19 @@ public class Exam02Controller {
 		List<Member> members = repository.findUsers("용");
 
 		return members;
+	}
+
+	@GetMapping("/ex08")
+	public List<Member> ex08(){
+		Pageable pageable = PageRequest.of(0, 10);
+		BooleanBuilder builder = new BooleanBuilder();
+		QMember member = QMember.member;
+
+		builder.and(member.userNm.contains("자"))
+				.and(member.userId.notIn("user1", "user2"));
+
+		Page<Member> page = repository.findAll(builder, pageable);
+
+		return page.getContent();
 	}
 }
