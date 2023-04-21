@@ -13,14 +13,13 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
-
 	@CreatedDate
-	@Column(updatable = false)
+	@Column(updatable = false)			//수정(UPDATE) 불가
 	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime regDt;
 
 	@LastModifiedDate
-	@Column(insertable = false)
+	@Column(insertable = false)			//추가(INSERT) 불가
 	@Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime modDt;
 }
