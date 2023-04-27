@@ -13,7 +13,6 @@ public interface UsersRepository extends JpaRepository<Users, Long>, QuerydslPre
 		QUsers users = QUsers.users;
 
 		boolean exists = exists(users.userId.eq(userId));
-
 		return exists;
 	}
 }

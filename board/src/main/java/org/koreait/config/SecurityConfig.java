@@ -36,7 +36,6 @@ public class SecurityConfig {
 				.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
 				.logoutSuccessUrl("/user/login");	// 로그아웃 성공시 이동할 URL
-
 		http.authorizeHttpRequests()
 				.requestMatchers("/mypage/**").authenticated()
 									//로그인한 회원만 가능한 URL 패턴

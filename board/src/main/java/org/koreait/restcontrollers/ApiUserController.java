@@ -31,32 +31,38 @@ public class ApiUserController {
 	public ResponseEntity<Object> account(@RequestBody @Valid JoinForm joinForm, Errors errors) {
 		validator.validate(joinForm, errors);
 
-		ResourceBundle bundle = ResourceBundle.getBundle("messages.validations");
-
 		if(errors.hasErrors()){
-			List<String> errMessages = errors.getAllErrors().stream().map(e -> {
-				List<String> messages = new ArrayList<>();
-				String[] codes = e.getCodes();
-				for(String code : codes){
-					String msg = null;
-					try{
-						msg = bundle.getString(code);
-					} catch (Exception e2){
-						msg = e.getDefaultMessage();
-					}
-
-					if(msg != null && !msg.isBlank()){
-						messages.add(msg);
-					}
-				}
-				return messages.stream().collect(Collectors.joining(","));
-			}).toList();
-
-			String errMessage = errMessages.stream().collect(Collectors.joining(","));
-			throw new RestCommonException(errMessage, HttpStatus.BAD_REQUEST);
+			String errMessages = getErrMessage(errors);
+			throw new RestCommonException(errMessages, HttpStatus.BAD_REQUEST);
 		}
+
 		service.save(joinForm);
 
 		return ResponseEntity.ok().build();	//성공 시는 응답 코드 200, Body 데이터 없음
+	}
+
+
+	private String getErrMessage(Errors errors){
+		ResourceBundle bundle = ResourceBundle.getBundle("messages.validations");
+
+		String errMessages = errors.getAllErrors().stream().map(e -> {
+			List<String> messages = new ArrayList<>();
+			String[] codes = e.getCodes();
+			for(String code : codes) {
+				String msg = null;
+				try {
+					msg = bundle.getString(code);
+				} catch (Exception e2) {
+					msg = e.getDefaultMessage();
+				}
+
+				if (msg != null && !msg.isBlank()) {
+					messages.add(msg);
+				}
+			}
+			return messages.stream().collect(Collectors.joining(","));
+
+		}).collect(Collectors.joining());
+		return errMessages;
 	}
 }
