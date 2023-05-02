@@ -1,15 +1,20 @@
 package org.koreait.restcontrollers;
 
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.koreait.entities.BoardData;
 import org.koreait.entities.Member;
+import org.koreait.entities.QBoardData;
+import org.koreait.repositories.BoardDataRepository;
 import org.koreait.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.query.JpaQueryMethodFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JPAExamController {
 	private final MemberRepository repository;
+	private final BoardDataRepository boardDataRepository;
 
 	@Autowired
 	private EntityManager em;
@@ -102,5 +108,28 @@ public class JPAExamController {
 	public void ex07() {
 		List<Member> members = repository.findMembers("자");
 		members.stream().forEach(System.out::println);
+	}
+
+	@GetMapping("/ex11")
+	public void ex11() {
+		List<BoardData> datas = boardDataRepository.getBoardData("제목");
+	}
+
+	@GetMapping("/ex12")
+	public void ex12() {
+		QBoardData boardData = QBoardData.boardData;
+		JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+
+		JPAQuery<BoardData> jpaQuery = jpaQueryFactory.selectFrom(boardData)
+				.leftJoin(boardData.member)
+				.fetchJoin();
+
+		List<BoardData> datas = jpaQuery.fetch();
+	}
+
+	@GetMapping("/ex13")
+	public void ex13() {
+		List<BoardData> datas = boardDataRepository.getBoardData2("제목");
+
 	}
 }
